@@ -1,6 +1,5 @@
 // There is not much IO, so rayon can be utilized here
 use guten_rs::postprocess;
-use guten_rs::cleaner;
 use guten_rs::config;
 use rayon::prelude::*;
 
@@ -42,7 +41,7 @@ fn main () -> Result<(), anyhow::Error> {
             },
            Err(e) => println!("{:?}", e), 
         }
-    })
+    });
 
     Ok(())
 }

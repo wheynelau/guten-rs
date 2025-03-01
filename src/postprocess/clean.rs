@@ -5,27 +5,31 @@ use once_cell::sync::Lazy;
 use std::collections::HashSet;
 use std::path::Path;
 use std::fs;
-use std::io::Write;
 
-pub fn clean_file (path:&str, download_path:&str, output_path: &Path) -> Result<(), anyhow::Error> {
+pub fn clean_file(path: &str, download_path: &str, output_path: &Path) -> Result<(), anyhow::Error> {
+    // Get the source file path
+    let source_file = Path::new(path);
     
-    let fname = Path::new(path);
-    let root_folder = fname.parent().unwrap();
-    let root_folder_str = root_folder.to_str().unwrap(); 
-    let folder_to_make_str = root_folder_str.replace(download_path, output_path.to_str().unwrap()); // replacement
-    let folder_to_make = Path::new(&folder_to_make_str);
-
-    fs::create_dir_all(folder_to_make)?; // Corrected method name
-    let file_bytes = fs::read(fname)?;
-    let string:String = String::from_utf8_lossy(&file_bytes).into();
-
-    let cleaned = strip_headers(string);
-        {
-            let mut file = fs::File::create("clean.txt").unwrap();
-            write!(file, "{}", cleaned);
-        }
+    // Create the destination path by replacing download_path with output_path
+    let rel_path = source_file.strip_prefix(download_path)
+        .map_err(|_| anyhow::anyhow!("Source file is not within download path"))?;
+    let dest_file = output_path.join(rel_path);
     
+    // Create parent directories
+    if let Some(parent) = dest_file.parent() {
+        fs::create_dir_all(parent)?;
+    }
+    
+    // Read, clean, and write the file
+    let file_bytes = fs::read(source_file)?;
+    let content = String::from_utf8_lossy(&file_bytes).into();
+    let cleaned = strip_headers(content);
+    
+    fs::write(dest_file, cleaned)?;
+    
+    Ok(())
 }
+
 
 fn strip_headers (text:String) -> String {
 
@@ -95,7 +99,7 @@ mod tests {
         let cleaned = strip_headers(string);
         {
             let mut file = fs::File::create("clean.txt").unwrap();
-            write!(file, "{}", cleaned);
+            write!(file, "{}", cleaned).unwrap();
         }
     }
     #[test]

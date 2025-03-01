@@ -3,7 +3,7 @@ use std::io;
 
 pub fn unzip(file:&str, _remove: bool) -> Result<(), anyhow::Error> {
     let fname = std::path::Path::new(file);
-    let file = fs::File::open(&fname)?;
+    let file = fs::File::open(fname)?;
 
     let mut archive = zip::ZipArchive::new(file).unwrap();
     let root_folder = fname.parent().unwrap();
@@ -60,7 +60,7 @@ pub fn unzip(file:&str, _remove: bool) -> Result<(), anyhow::Error> {
 #[cfg(test)]
 mod tests {
 
-    use super::*;
+    
 
     #[test]
     fn test_unzip () {
