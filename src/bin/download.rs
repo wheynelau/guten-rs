@@ -40,11 +40,10 @@
 //     }
 //     // Since it takes an Option type
 //     website.with_concurrency_limit(config.crawler_settings.concurrency_limit);
-    
 
 //     website.with_whitelist_url(
 //         Some(
-//             config.whitelist.iter().map(|url| 
+//             config.whitelist.iter().map(|url|
 //             url.into()).collect()
 //         )
 //     );
@@ -64,11 +63,11 @@
 //         links.len()
 //     );
 //     let parsed_links = parser::parse(links, website_url);
-    
+
 //     downloader::download(parsed_links, website_url, download_path, &config).await?;
 //     Ok(())
 // }
 
-fn main () {
+fn main() {
     println!("Hello, world!");
 }

@@ -1,7 +1,7 @@
 use std::fs;
 use std::io;
 
-pub fn unzip(file:&str, _remove: bool) -> Result<(), anyhow::Error> {
+pub fn unzip(file: &str, _remove: bool) -> Result<(), anyhow::Error> {
     let fname = std::path::Path::new(file);
     let file = fs::File::open(fname)?;
 
@@ -53,17 +53,11 @@ pub fn unzip(file:&str, _remove: bool) -> Result<(), anyhow::Error> {
         }
     }
     Ok(())
-
 }
-
 
 #[cfg(test)]
 mod tests {
 
-    
-
     #[test]
-    fn test_unzip () {
-
-    }
+    fn test_unzip() {}
 }
