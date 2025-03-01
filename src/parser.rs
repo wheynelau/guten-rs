@@ -20,7 +20,6 @@ impl ExtractedLinks {
 pub fn filter_href(current_link: &str, href: Vec<&str>) -> ExtractedLinks {
     // if .zip and .txt exist, take .zip
     // if the zip is for the folder, remove the folder
-
     let mut base_to_path: HashMap<&str, &str> = HashMap::new();
 
     // First pass: collect all paths by their base name (without extension)

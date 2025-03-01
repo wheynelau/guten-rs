@@ -1,4 +1,4 @@
 pub mod config;
+pub mod downloader;
 pub mod parser;
-// pub mod downloader;
 pub mod postprocess;

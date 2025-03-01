@@ -1,5 +1,5 @@
-url = "https://mirror.csclub.uwaterloo.ca/gutenberg/"
-whitelist = ["/1"]
+url = "https://gutenberg.pglaf.org/"
+whitelist = ["0/"]
 mirrors = [
     "https://mirror.csclub.uwaterloo.ca/gutenberg/",
     "https://aleph.gutenberg.org/",
