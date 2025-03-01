@@ -1,9 +1,16 @@
-url = "https://gutenberg.pglaf.org/"
-whitelist = ["/0"]
+url = "https://mirror.csclub.uwaterloo.ca/gutenberg/"
+whitelist = ["/1"]
 mirrors = [
     "https://mirror.csclub.uwaterloo.ca/gutenberg/",
-    "https://aleph.gutenberg.org/"
+    "https://aleph.gutenberg.org/",
+    "https://gutenberg.pglaf.org/"
 ]
+download_path = "download"
+debug = false
 
 [download_settings]
 concurrency = 8
+
+[crawler_settings]
+delay = 5
+retry = 10

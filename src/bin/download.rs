@@ -20,11 +20,27 @@ async fn main() -> Result<(), Error> {
         Some(path) => path,
         None => "./download"
     };
-    let _env = Env::default()
-    .filter_or("RUST_LOG", "info")
-    .write_style_or("RUST_LOG_STYLE", "always");
 
-    // env_logger::init_from_env(_env);
+    match config.debug {
+        Some(true) => {
+            println!("Debug mode!");
+            let _env = Env::default()
+            .filter_or("RUST_LOG", "info")
+            .write_style_or("RUST_LOG_STYLE", "always");
+
+            env_logger::init_from_env(_env);
+        },
+        _ => {}
+    }
+    if let Some(value) = config.crawler_settings.delay {
+        website.with_delay(value);
+    }
+    if let Some(value) = config.crawler_settings.retry {
+        website.with_retry(value);
+    }
+    // Since it takes an Option type
+    website.with_concurrency_limit(config.crawler_settings.concurrency_limit);
+    
 
     website.with_whitelist_url(
         Some(
@@ -32,6 +48,7 @@ async fn main() -> Result<(), Error> {
             url.into()).collect()
         )
     );
+
     website.with_full_resources(true);
 
     let start = Instant::now();

@@ -6,11 +6,13 @@ pub fn unzip(file:&str, _remove: bool) -> Result<(), anyhow::Error> {
     let file = fs::File::open(&fname)?;
 
     let mut archive = zip::ZipArchive::new(file).unwrap();
-
+    let root_folder = fname.parent().unwrap();
+    // for testing
+    let root_folder = std::path::Path::new("./output");
     for i in 0..archive.len() {
         let mut file = archive.by_index(i).unwrap();
         let outpath = match file.enclosed_name() {
-            Some(path) => path,
+            Some(path) => root_folder.join(path),
             None => continue,
         };
 
@@ -53,8 +55,6 @@ pub fn unzip(file:&str, _remove: bool) -> Result<(), anyhow::Error> {
     Ok(())
 
 }
-
-fn get_root()
 
 
 #[cfg(test)]

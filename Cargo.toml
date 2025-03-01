@@ -9,13 +9,19 @@ name = "download"
 [[bin]]
 name = "process"
 
+[[bin]]
+name = "crawl"
+
 
 [dependencies]
 anyhow = "1.0.96"
 env_logger = "0.11.6"
 futures = "0.3.31"
+glob = "0.3.2"
 indicatif = { version = "0.17.11", features = ["tokio"] }
+once_cell = "1.20.3"
 rand = "0.9.0"
+rayon = "1.10.0"
 reqwest = "0.12.12"
 serde = "1.0.218"
 spider = { version = "2.31.1", features = ["regex"] }

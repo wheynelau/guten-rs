@@ -1,22 +1,10 @@
 /// Copied from https://github.com/kiasar/gutenberg_cleaner/blob/master/_cleaning_options/strip_headers.py
 
-use std::sync::OnceLock;
+use once_cell::sync::Lazy;
 use std::collections::HashSet;
 
-pub (super) static TEXT_START_MARKERS: OnceLock<HashSet<&'static str>> = OnceLock::new();
-pub (super) static TEXT_END_MARKER: OnceLock<HashSet<&'static str>> = OnceLock::new();
-pub (super) static LEGALESE_START_MARKER: OnceLock<HashSet<&'static str>> = OnceLock::new();
-pub (super) static LEGALESE_END_MARKERS: OnceLock<HashSet<&'static str>> = OnceLock::new();
-
-pub fn init() {
-    LEGALESE_END_MARKERS.get_or_init(|| {
-        HashSet::from(["<<THIS ELECTRONIC VERSION OF"])
-    });
-    LEGALESE_END_MARKERS.get_or_init(|| {
-        HashSet::from(["SERVICE THAT CHARGES FOR DOWNLOAD"])
-    });
-    TEXT_START_MARKERS.get_or_init(|| { 
-        HashSet::from([
+pub (super) static TEXT_START_MARKERS: Lazy<HashSet<&'static str>> = Lazy::new(|| {
+    HashSet::from([
         "*END*THE SMALL PRINT",
         "*** START OF THE PROJECT GUTENBERG",
         "*** START OF THIS PROJECT GUTENBERG",
@@ -71,35 +59,40 @@ pub fn init() {
         "Mary Meehan, and the Project Gutenberg Online Distributed Proofreading",
         "                this Project Gutenberg edition.",
         ])
-    });
-    TEXT_END_MARKER.get_or_init(|| { 
-        HashSet::from([
-        "*** END OF THE PROJECT GUTENBERG",
-        "*** END OF THIS PROJECT GUTENBERG",
-        "***END OF THE PROJECT GUTENBERG",
-        "End of the Project Gutenberg",
-        "End of The Project Gutenberg",
-        "Ende dieses Project Gutenberg",
-        "by Project Gutenberg",
-        "End of Project Gutenberg",
-        "End of this Project Gutenberg",
-        "Ende dieses Projekt Gutenberg",
-        "        ***END OF THE PROJECT GUTENBERG",
-        "*** END OF THE COPYRIGHTED",
-        "End of this is COPYRIGHTED",
-        "Ende dieses Etextes ",
-        "Ende dieses Project Gutenber",
-        "Ende diese Project Gutenberg",
-        "**This is a COPYRIGHTED Project Gutenberg Etext, Details Above**",
-        "Fin de Project Gutenberg",
-        "The Project Gutenberg Etext of ",
-        "Ce document fut presente en lecture",
-        "Ce document fut présenté en lecture",
-        "More information about this book is at the top of this file.",
-        "We need your donations more than ever!",
-        "END OF PROJECT GUTENBERG",
-        " End of the Project Gutenberg",
-        " *** END OF THIS PROJECT GUTENBERG",
-        ])
-    });
-}
+});
+pub (super) static TEXT_END_MARKERS: Lazy<HashSet<&'static str>> = Lazy::new(|| { 
+    HashSet::from([
+    "*** END OF THE PROJECT GUTENBERG",
+    "*** END OF THIS PROJECT GUTENBERG",
+    "***END OF THE PROJECT GUTENBERG",
+    "End of the Project Gutenberg",
+    "End of The Project Gutenberg",
+    "Ende dieses Project Gutenberg",
+    "by Project Gutenberg",
+    "End of Project Gutenberg",
+    "End of this Project Gutenberg",
+    "Ende dieses Projekt Gutenberg",
+    "        ***END OF THE PROJECT GUTENBERG",
+    "*** END OF THE COPYRIGHTED",
+    "End of this is COPYRIGHTED",
+    "Ende dieses Etextes ",
+    "Ende dieses Project Gutenber",
+    "Ende diese Project Gutenberg",
+    "**This is a COPYRIGHTED Project Gutenberg Etext, Details Above**",
+    "Fin de Project Gutenberg",
+    "The Project Gutenberg Etext of ",
+    "Ce document fut presente en lecture",
+    "Ce document fut présenté en lecture",
+    "More information about this book is at the top of this file.",
+    "We need your donations more than ever!",
+    "END OF PROJECT GUTENBERG",
+    " End of the Project Gutenberg",
+    " *** END OF THIS PROJECT GUTENBERG",
+    ])
+});
+pub (super) static LEGALESE_START_MARKERS: Lazy<HashSet<&'static str>> = Lazy::new(|| {
+    HashSet::from(["SERVICE THAT CHARGES FOR DOWNLOAD"])
+});
+pub (super) static LEGALESE_END_MARKERS: Lazy<HashSet<&'static str>> = Lazy::new(|| {
+    HashSet::from(["<<THIS ELECTRONIC VERSION OF"])
+});

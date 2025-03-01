@@ -7,11 +7,20 @@ pub struct Config {
    pub download_path: Option<String>,
    pub mirrors: Vec<String>,
    pub download_settings: DownloadSettings,
+   pub crawler_settings: CrawlerSettings,
+   pub debug: Option<bool>
 }
 
 #[derive(Deserialize, Debug, Clone)]
 pub struct DownloadSettings {
    pub concurrency : usize,
+}
+
+#[derive(Deserialize, Debug, Clone)]
+pub struct CrawlerSettings {
+   pub concurrency_limit: Option<usize>,
+   pub delay : Option<u64>,
+   pub retry: Option<u8>,
 }
 
 // find a default config file
