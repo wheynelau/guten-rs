@@ -36,21 +36,14 @@ fn strip_headers (text:String) -> String {
     // hardcode?
     let sep = "\n";
     let mut out: Vec<&str> = Vec::new();
-    let mut footer_found: bool = false;
     let mut ignore_section: bool = false;
-    let mut reset = false;
     let mut i:u16 = 0;
 
     for line in text.lines() {
-        // println!("{:?}", &line);
-        reset = false;
 
         if i <= 600 {
             // check if header ends here
             if lines_starts_with(line, &constants::TEXT_START_MARKERS) {
-                reset = true
-            }
-            if reset {
                 out.clear();
                 continue
             }
@@ -61,9 +54,6 @@ fn strip_headers (text:String) -> String {
         if i>=100 {
             // Check if the footer begins here
             if lines_starts_with(line, &constants::TEXT_END_MARKERS) {                
-                footer_found = true
-            }
-            if footer_found {
                 break
             }
         }
