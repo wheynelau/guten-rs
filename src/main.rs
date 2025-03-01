@@ -1,28 +1,35 @@
 use spider::tokio;
 use spider::website::Website;
+use anyhow::Error;
+
 use std::time::Instant;
 use env_logger::Env;
 
+
 pub mod parser;
+pub mod config;
+pub mod downloader;
 
 #[tokio::main]
-async fn main() {
-    let website_url = "https://mirrors.xmission.com/gutenberg/";
+async fn main() -> Result<(), Error> {
+
+    let config = config::get_config();
+    let website_url = &config.url;
     let mut website: Website = Website::new(website_url);
 
-    let urls = vec![
-        "/0",
-    ];
-
+    let download_path = match &config.download_path {
+        Some(path) => path,
+        None => "./download"
+    };
     let env = Env::default()
     .filter_or("RUST_LOG", "info")
     .write_style_or("RUST_LOG_STYLE", "always");
 
-    env_logger::init_from_env(env);
+    // env_logger::init_from_env(env);
 
     website.with_whitelist_url(
         Some(
-            urls.into_iter().map(|url| 
+            config.whitelist.iter().map(|url| 
             url.into()).collect()
         )
     );
@@ -35,15 +42,25 @@ async fn main() {
     let duration = start.elapsed();
     let links = website.get_links();
 
-    for link in links.iter() {
-        println!("- {:?}", link.as_ref());
-    }
     println!(
         "Time elapsed in website.crawl() is: {:?} for total pages: {:?}",
         duration,
         links.len()
     );
     let parsed_links = parser::parse(links, website_url);
-    println!("Parsed links: {:?}", parsed_links);
-    println!("Parsed links: {:?}", parsed_links.len());
+    
+    for link in parsed_links.iter() {
+        println!("- {}" , link)
+    }
+    // download the links
+    // for link in parsed_links.iter() {
+    //     let mut file = File::create(link.as_ref()).expect("Failed to create file");
+    //     let mut response = reqwest::get(link.as_ref()).await.expect("Failed to get response");
+    //     let mut body = String::new();
+    //     response.read_to_string(&mut body).expect("Failed to read body");
+    //     file.write_all(body.as_bytes()).expect("Failed to write to file");
+    // }
+
+    downloader::download(parsed_links, website_url, download_path, &config).await?;
+    Ok(())
 }

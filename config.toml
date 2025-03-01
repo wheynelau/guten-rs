@@ -1,0 +1,9 @@
+url = "https://gutenberg.pglaf.org/"
+whitelist = ["/0"]
+mirrors = [
+    "https://mirror.csclub.uwaterloo.ca/gutenberg/",
+    "https://aleph.gutenberg.org/"
+]
+
+[download_settings]
+concurrency = 8

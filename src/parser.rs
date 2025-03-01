@@ -12,7 +12,9 @@ pub fn parse(links: HashSet<CaseInsensitiveString>, website_url: &str) -> Vec<St
             if link.ends_with(".zip") {
                 zips.insert(clean_path);
                 final_results.push(link.to_string());
-            } else if !link.ends_with("/") {
+            } 
+            // No need to check for ends with ("/"), suffix handles it
+            else {
                 non_zip_paths.insert(clean_path, link.to_string());
             }
         }
@@ -39,7 +41,7 @@ fn file_is_part_of_zip (path: &str, map: &HashSet<String>) -> bool {
 }
 
 
-fn suffix(website_url: &str, full_path: &str) -> Option<String> {
+pub fn suffix(website_url: &str, full_path: &str) -> Option<String> {
     // Remove the website_url prefix if present
     let path = full_path.strip_prefix(website_url).unwrap_or(full_path);
     
@@ -64,6 +66,7 @@ mod tests {
             "https://abc.0/1.zip".into(),
             "https://abc.0/1.html".into(),
             // not sure if such a case happens
+            // strugggling to pass this test
             // "https://abc.0/1/2.zip".into(),
             "https://abc.0/3.html".into(),
 
@@ -98,6 +101,20 @@ mod tests {
         let result = suffix(website_url, link);
         assert_eq!(result, None);
         let link = "https://abc.0/1/2.zip";
+        let result = suffix(website_url, link);
+        assert_eq!(result, Some("1/2".to_string()));
+    }
+
+    #[test]
+    fn test_suffix () {
+        let website_url = "https://abc.0/";
+        let link = "https://abc.0/1/2/3";
+        let result = suffix(website_url, link);
+        assert_eq!(result, None);
+        let link = "https://abc.0/1/2.zip";
+        let result = suffix(website_url, link);
+        assert_eq!(result, Some("1/2".to_string()));
+        let link = "https://abc.0/1/2.html";
         let result = suffix(website_url, link);
         assert_eq!(result, Some("1/2".to_string()));
     }

@@ -4,5 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.96"
 env_logger = "0.11.6"
+futures = "0.3.31"
+indicatif = { version = "0.17.11", features = ["tokio"] }
+rand = "0.9.0"
+reqwest = "0.12.12"
+serde = "1.0.218"
 spider = { version = "2.31.1", features = ["regex"] }
+toml = "0.8.20"
+trauma = "2.2.6"
