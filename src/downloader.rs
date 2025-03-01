@@ -5,7 +5,7 @@ use indicatif::ProgressBar;
 use spider::{tokio::{self, io::AsyncWriteExt}, url::Url};
 use rand::prelude::*;
 use trauma::{download::Download, downloader::DownloaderBuilder};
-
+use std::time::Instant;
 
 use crate::config::Config;
 
@@ -114,13 +114,6 @@ async fn download_one_file(
     // Create the directory if it doesn't exist
     tokio::fs::create_dir_all(parent).await?;
     
-    // Construct the full URL
-    // let full_url = if url.starts_with("http") {
-    //     url.to_string()
-    // } else {
-    //     format!("{}{}", website_url, url)
-    // };
-    
     // Download the file
     let max_retries = 32;
     let response = fetch_with_retry(&client, url, max_retries).await?;
@@ -150,7 +143,9 @@ async fn download_one_file(
 pub async fn download(full_url: Vec<String>, 
         website_url : &str, 
         download_path: &str,
-        _config: &Config) -> Result<(), Error> {
+        config: &Config) -> Result<(), Error> {
+    let start = Instant::now();
+    let concurrency = config.download_settings.concurrency;
     let downloads: Vec<Download> = full_url.into_iter()
     .filter_map(|url| {
         // Try to build the download path and handle the Result
@@ -166,8 +161,12 @@ pub async fn download(full_url: Vec<String>,
         }
     })
     .collect();
-    let downloader = DownloaderBuilder::new().build();
+    let downloader = DownloaderBuilder::new()
+    .concurrent_downloads(concurrency)
+    .build();
     downloader.download(&downloads).await;
+
+    println!("Download time: {:?}", start.elapsed());
     Ok(())
 }
 

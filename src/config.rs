@@ -16,6 +16,7 @@ pub struct DownloadSettings {
 
 // find a default config file
 pub fn get_config() -> Config {
+
     let config_file = std::fs::read_to_string("config.toml")
     .expect("Failed to read config file");
     let config: Config = toml::from_str(&config_file).expect("Failed to parse config file");

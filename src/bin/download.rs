@@ -5,10 +5,9 @@ use anyhow::Error;
 use std::time::Instant;
 use env_logger::Env;
 
-
-pub mod parser;
-pub mod config;
-pub mod downloader;
+use guten_rs::config;
+use guten_rs::parser;
+use guten_rs::downloader;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
@@ -21,11 +20,11 @@ async fn main() -> Result<(), Error> {
         Some(path) => path,
         None => "./download"
     };
-    let env = Env::default()
+    let _env = Env::default()
     .filter_or("RUST_LOG", "info")
     .write_style_or("RUST_LOG_STYLE", "always");
 
-    // env_logger::init_from_env(env);
+    // env_logger::init_from_env(_env);
 
     website.with_whitelist_url(
         Some(
@@ -49,18 +48,6 @@ async fn main() -> Result<(), Error> {
     );
     let parsed_links = parser::parse(links, website_url);
     
-    for link in parsed_links.iter() {
-        println!("- {}" , link)
-    }
-    // download the links
-    // for link in parsed_links.iter() {
-    //     let mut file = File::create(link.as_ref()).expect("Failed to create file");
-    //     let mut response = reqwest::get(link.as_ref()).await.expect("Failed to get response");
-    //     let mut body = String::new();
-    //     response.read_to_string(&mut body).expect("Failed to read body");
-    //     file.write_all(body.as_bytes()).expect("Failed to write to file");
-    // }
-
     downloader::download(parsed_links, website_url, download_path, &config).await?;
     Ok(())
 }
