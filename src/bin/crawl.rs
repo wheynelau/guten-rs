@@ -5,28 +5,20 @@ use std::collections::HashSet;
 use std::sync::{Arc, Mutex};
 use indicatif::ProgressBar;
 
-use guten_rs::parser::ExtractedLinks;
+use guten_rs::parser::{ExtractedLinks, filter_href};
 
 fn extract_links(current_link: &str, html: &str) -> ExtractedLinks {
     let document = Document::from(html);
-    let mut directories = Vec::new();
-    let mut files = Vec::new();
-    
+    let mut href_vec: Vec<&str> = Vec::new();
     for link in document.find(Name("a")) {
         if let Some(href) = link.attr("href") {
             if href != "../" {  // Skip parent directory links
-                if href.ends_with("/") {
-                    directories.push(format!("{}{}", current_link, href));
-                } else {
-                    // These are the objects/files
-                    files.push(format!("{}{}", current_link, href));
-                }
+                href_vec.push(href);
             }
         }
     }
+    filter_href(current_link,href_vec)
 
-    
-    ExtractedLinks { directories, files }
 }
 
 async fn crawl(

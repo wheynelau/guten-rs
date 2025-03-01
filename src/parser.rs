@@ -9,7 +9,7 @@ pub struct ExtractedLinks {
 }
 
 // this filters the zip and the source files
-pub fn filter_href(href: Vec<&str>) -> ExtractedLinks {
+pub fn filter_href(current_link: &str, href: Vec<&str>) -> ExtractedLinks {
     // if .zip and .txt exist, take .zip
     // if the zip is for the folder, remove the folder
 
@@ -78,6 +78,7 @@ pub fn filter_href(href: Vec<&str>) -> ExtractedLinks {
         // Add to result if it's the preferred version for this base name
         if base_to_path.get(base) == Some(&path) {
             // if is a folder, add to directories
+            let path = format!{"{}{}", current_link, path};
             if path.ends_with('/') {
                 result.directories.push(path.to_string());
             } else {
@@ -101,7 +102,7 @@ mod tests {
             "2.zip",
             "2/",
             "3/",];
-        let filtered = filter_href(hrefs);
+        let filtered = filter_href("",hrefs);
         
         println!("{:?}", filtered);
         // contain 3/ only
