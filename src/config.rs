@@ -5,7 +5,6 @@ pub struct Config {
     pub url: String,
     pub whitelist: Vec<String>,
     pub download_path: Option<String>,
-    pub mirrors: Vec<String>,
     pub download_settings: DownloadSettings,
     pub crawler_settings: CrawlerSettings,
     pub debug: Option<bool>,
@@ -39,10 +38,6 @@ mod tests {
         let config_str = r#"
 url = "https://testurl.com"
 whitelist = ["/0"]
-mirrors = [
-"https://mirror.csclub.uwaterloo.ca/gutenberg/",
-"https://aleph.gutenberg.org/"
-]
 
 [download_settings]
 concurrency = 8

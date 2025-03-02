@@ -1,10 +1,6 @@
 url = "https://gutenberg.pglaf.org/"
 whitelist = ["0/","1/","2/","3/","4/","5/","6/","7/","8/","9/"]
-mirrors = [
-    "https://mirror.csclub.uwaterloo.ca/gutenberg/",
-    "https://aleph.gutenberg.org/",
-    "https://gutenberg.pglaf.org/"
-]
+
 download_path = "download"
 debug = false
 
