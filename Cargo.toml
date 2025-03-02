@@ -2,6 +2,8 @@
 name = "guten-rs"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/wheynelau/guten-rs"
+description = "Gutenburg crawler, downloader and cleaner"
 
 [dependencies]
 anyhow = "1.0.96"
@@ -21,3 +23,8 @@ tokio = { version = "1.43.0", features = ["full"] }
 toml = "0.8.20"
 trauma = "2.2.6"
 zip = "2.2.3"
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
