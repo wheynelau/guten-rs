@@ -29,17 +29,28 @@ fn main() -> Result<(), anyhow::Error> {
         Err(e) => println!("{:?}", e),
     });
     // Now match all
-    let pattern = format!("{}/**/*.txt", download_dir);
+    let pattern = format!("{}/**/*", download_dir);
     // Only txt supported for now
-    let txt_files: Vec<PathBuf> = glob(&pattern)
+    let all_files: Vec<PathBuf> = glob(&pattern)
         .expect("Failed to read glob pattern")
         .filter_map(Result::ok)
         .collect();
 
-    println!("Found {} files to process", txt_files.len());
+    println!("Found {} files to process", all_files.len());
     // Stage 2: Start the data processing
-    txt_files.par_iter().for_each(|source_file| {
-        postprocess::clean::clean_file(source_file, download_dir, output_path).unwrap();
-    });
+    all_files
+        .par_iter()
+        .filter(|source_file| source_file.extension().is_some())
+        .for_each(|source_file| {
+            // Now we only process files that have extensions
+            let extension = source_file.extension().unwrap();
+
+            if extension == "txt" {
+                postprocess::clean::clean_txt(source_file, download_dir, output_path).unwrap();
+            }
+            // Input other file types here
+            // else if extension == "pdf" {
+        });
+
     Ok(())
 }

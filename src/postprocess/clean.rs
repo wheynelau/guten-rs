@@ -6,7 +6,7 @@ use std::collections::HashSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
-pub fn clean_file(
+pub fn clean_txt(
     source_file: &PathBuf,
     download_path: &str,
     output_path: &Path,

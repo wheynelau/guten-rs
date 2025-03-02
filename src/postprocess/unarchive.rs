@@ -7,8 +7,6 @@ pub fn unzip(file: &str, _remove: bool) -> Result<(), anyhow::Error> {
 
     let mut archive = zip::ZipArchive::new(file).unwrap();
     let root_folder = fname.parent().unwrap();
-    // for testing
-    let root_folder = std::path::Path::new("./output");
     for i in 0..archive.len() {
         let mut file = archive.by_index(i).unwrap();
         let outpath = match file.enclosed_name() {
@@ -16,12 +14,12 @@ pub fn unzip(file: &str, _remove: bool) -> Result<(), anyhow::Error> {
             None => continue,
         };
 
-        {
-            let comment = file.comment();
-            if !comment.is_empty() {
-                println!("File {i} comment: {comment}");
-            }
-        }
+        // {
+        //     let comment = file.comment();
+        //     if !comment.is_empty() {
+        //         println!("File {i} comment: {comment}");
+        //     }
+        // }
 
         if file.is_dir() {
             println!("File {} extracted to \"{}\"", i, outpath.display());

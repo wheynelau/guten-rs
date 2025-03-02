@@ -3,15 +3,9 @@ name = "guten-rs"
 version = "0.1.0"
 edition = "2021"
 
-[[bin]]
-name = "process"
-
-[[bin]]
-name = "crawl"
-
-
 [dependencies]
 anyhow = "1.0.96"
+clap = { version = "4.5.31", features = ["derive"] }
 env_logger = "0.11.6"
 futures = "0.3.31"
 glob = "0.3.2"
@@ -22,6 +16,7 @@ rayon = "1.10.0"
 reqwest = "0.12.12"
 select = "0.6.0"
 serde = { version = "1.0.218", features = ["derive"] }
+serde_json = "1.0.139"
 tokio = { version = "1.43.0", features = ["full"] }
 toml = "0.8.20"
 trauma = "2.2.6"

@@ -1,3 +1,5 @@
+// This is unused, just for reference
+
 use spider::hashbrown::{HashSet,HashMap};
 use spider::CaseInsensitiveString;
 
