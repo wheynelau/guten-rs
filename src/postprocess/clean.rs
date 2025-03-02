@@ -4,15 +4,14 @@ use super::constants;
 use once_cell::sync::Lazy;
 use std::collections::HashSet;
 use std::fs;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 pub fn clean_file(
-    path: &str,
+    source_file: &PathBuf,
     download_path: &str,
     output_path: &Path,
 ) -> Result<(), anyhow::Error> {
     // Get the source file path
-    let source_file = Path::new(path);
 
     // Create the destination path by replacing download_path with output_path
     let rel_path = source_file
